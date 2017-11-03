@@ -36,10 +36,10 @@ class Articles extends CI_Controller{
 		];
 
 		// Transform JSON data into POST
-		$this->transformPayload();
+		$payload = $this->getPayload();
 
 		// Store the data in the database
-		$save = $this->articles_model->create($_POST);
+		$save = $this->articles_model->create($payload);
 
 		// Storage success
 		if($save["saved"] == true){
@@ -75,9 +75,9 @@ class Articles extends CI_Controller{
 		];
 
 		// Transform JSON data into POST
-		$this->transformPayload();
+		$payload = $this->getPayload();
 
-		$save = $this->articles_model->update($id, $_POST);
+		$save = $this->articles_model->update($id, $payload);
 
 		if($save["found"] == false){
 			$this->output
@@ -94,7 +94,7 @@ class Articles extends CI_Controller{
 		else if($save["saved"] == true){
 			$this->output->set_status_header(201);
 
-			$this->get($save["id"]);
+			$this->get($id);
 		}
 
 		else{
@@ -165,13 +165,14 @@ class Articles extends CI_Controller{
 	 * 
 	 * @return Array The data transformed into POST
 	 */
-	private function transformPayload(){
+	private function getPayload(){
 		$requestType   = $this->input->get_request_header("content-type");
+		$data = $_POST;
 
 		if($requestType == "application/json"){
-			$_POST = json_decode($this->input->raw_input_stream, true);
+			$data = json_decode($this->input->raw_input_stream, true);
 		}
 
-		return $_POST;
+		return $data;
 	}
 }

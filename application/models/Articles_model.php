@@ -26,13 +26,7 @@ class Articles_model extends CI_Model{
 	 * @return Boolean       Whether the validation is passed
 	 */
 	private function validate($data){
-		$this->load->library("form_validation");
-
-		$this->form_validation->set_rules($this->rules);
-		$this->form_validation->set_data($data);
-		$this->form_validation->reset_validation();
-
-		return $this->form_validation->run();
+		return isset($data["title"]);
 	}
 
 	/**

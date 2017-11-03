@@ -79,7 +79,7 @@ $db['default'] = array(
 	'username' => 'development',
 	'password' => 'nonroot3141',
 	'database' => 'workshop-test',
-	'dbdriver' => 'mysql',
+	'dbdriver' => 'mysqli',
 	'dbprefix' => '',
 	'pconnect' => FALSE,
 	'db_debug' => (ENVIRONMENT !== 'production'),

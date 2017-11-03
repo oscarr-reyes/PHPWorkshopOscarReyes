@@ -14,49 +14,13 @@
 		</div>
 	</div>
 	<div id="article-list" class="flexed flex-column">
-		<div class="article-item border d-flex flex-row">
-			<div class="article-item-img">
-				<img src="http://via.placeholder.com/100x100" alt="article image">
-			</div>
-			<div class="article-item-content container">
-				<h3>{article.title}</h3>
-				<p>{article.content}</p>
-			</div>
-		</div>
-		<div class="article-item border d-flex flex-row">
-			<div class="article-item-img">
-				<img src="http://via.placeholder.com/100x100" alt="article image">
-			</div>
-			<div class="article-item-content container">
-				<h3>{article.title}</h3>
-				<p>{article.content}</p>
-			</div>
-		</div>
-		<div class="article-item border d-flex flex-row">
-			<div class="article-item-img">
-				<img src="http://via.placeholder.com/100x100" alt="article image">
-			</div>
-			<div class="article-item-content container">
-				<h3>{article.title}</h3>
-				<p>{article.content}</p>
-			</div>
-		</div>
-		<div class="article-item border d-flex flex-row">
-			<div class="article-item-img">
-				<img src="http://via.placeholder.com/100x100" alt="article image">
-			</div>
-			<div class="article-item-content container">
-				<h3>{article.title}</h3>
-				<p>{article.content}</p>
-			</div>
-		</div>
 	</div>
 
 	<div id="article-detail" class="d-none">
 		<form class="container">
 			<div class="form-group-image d-flex">
 				<div id="input-image-selector" class="rounded mr-auto ml-auto" name="image"><img></div>
-				<input type="file" class="d-none" name="image">
+				<input type="file" class="d-none" name="image" accept="image/*">
 			</div>
 			<div class="form-group">
 				<label for="article-title-input">Title</label>
@@ -69,3 +33,17 @@
 		</form>
 	</div>
 </div>
+
+<script id="article-item-template" type="text/x-handlebars-template">
+	{{#each this}}
+	<div class="article-item border d-flex flex-row" data-id="{{id}}">
+		<div class="article-item-img">
+			<img src="http://via.placeholder.com/100x100" alt="article image">
+		</div>
+		<div class="article-item-content container">
+			<h3>{{title}}</h3>
+			<p>{{description}}</p>
+		</div>
+	</div>
+	{{/each}}
+</script>

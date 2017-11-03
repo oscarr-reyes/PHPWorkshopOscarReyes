@@ -8,10 +8,27 @@ $(document).ready(function(){
 	var articleDetail       = $("#article-detail");
 	var imageSelector       = $("#input-image-selector");
 	var inputImage          = $("input[type='file'");
+	var templateArticle     = $("#article-item-template");
 
-	hideLoader(5000)
+	var APIurl       = "index.php/api/articles";
+	var currentState = {
+		id: null,
+		fetch: true
+	};
+
+	hideLoader(50)
 		.then(function(){
 			mainContent.removeClass("d-none");
+			return fetchData();
+		})
+		.then(function(data){
+			if(currentState.fetch){
+				articleList.empty();
+
+				compile(data);
+
+				currentState.fetch = false;
+			}
 		});
 
 	/*
@@ -20,14 +37,32 @@ $(document).ready(function(){
 	contentHeader.on("click", "a", function(){
 		if(this.id == "new-article-button"){
 			displayTo("detail");
+
+			// Restore form if there is any data
+			document.forms[0].reset();
+
+			currentState.id = null;
 		}
 
 		if(this.id == "back-to-list-button"){
 			displayTo("list");
+
+			if(currentState.fetch){
+				articleList.empty();
+
+				compile(data);
+
+				currentState.fetch = false;
+			}
 		}
 
 		if(this.id == "save-button"){
-			console.log(getFormData());
+			var data = getFormData();
+
+			sendData(data)
+				.then(function(){
+					currentState.fetch = true;
+				});
 		}
 	});
 
@@ -48,7 +83,26 @@ $(document).ready(function(){
 		setPreview();
 	});
 
+	/*
+	 * Transition to article detail
+	 */
+	articleList.on("click", ".article-item", function(){
+		var id = $(this).data("id");
 
+		fetchData(id)
+			.then(function(data){
+				displayTo("detail");
+				setFormData(data);
+				currentState.id = data.id;
+			});
+	});
+
+	/**
+	 * Hides the initial loader and transitions to list
+	 * 
+	 * @param  {Number}  ms The millisecond time to wait for the loader
+	 * @return {Promise}    The result when the loader is hidden
+	 */
 	function hideLoader(ms){
 		return new Promise(function(resolve){
 			setTimeout(function(){
@@ -83,6 +137,17 @@ $(document).ready(function(){
 	}
 
 	/**
+	 * Compiles the html elements with the provided data
+	 * 
+	 * @param  {Array} data The list of articles data fetched from server
+	 */
+	function compile(data){
+		var template = Handlebars.compile(templateArticle.html());
+
+		articleList.html(template(data));
+	}
+
+	/**
 	 * Gets the form data by iterating the inputs in a form
 	 * 
 	 * @return {Oject} The object obtained from the input
@@ -101,6 +166,21 @@ $(document).ready(function(){
 	}
 
 	/**
+	 * Fills the input data in the form
+	 * 
+	 * @param {Object} data The object to extract the data
+	 */
+	function setFormData(data){
+		Object.keys(data).forEach(function(e){
+			var input = $("form *[name='" + e + "']");
+
+			if(input){
+				input.val(data[e]);
+			}
+		});
+	}
+
+	/**
 	 * Sets the image preview by reading the input file value
 	 */
 	function setPreview(){
@@ -111,5 +191,42 @@ $(document).ready(function(){
 		};
 
 		reader.readAsDataURL(inputImage[0].files[0]);
+	}
+
+	/**
+	 * Fetches the data from REST api service
+	 * 
+	 * @param  {Number}  $id The id of the resource in case is needed
+	 * @return {Promise}     The result fof the fetch
+	 */
+	function fetchData($id){
+		var url = APIurl;
+
+		if($id){
+			url += "/" + $id;
+		}
+
+		return $.ajax({
+			url: url,
+			method: "GET",
+			dataType: "json"
+		});
+	}
+
+	/**
+	 * Sends data to the API server
+	 * 
+	 * @param  {Object}  data The data to send to the server
+	 * @param  {Number}  $id  The record to update
+	 * @return {Promise}      The result for uploading the data
+	 */
+	function sendData(data, $id){
+		return $.ajax({
+			url: APIurl,
+			data: JSON.stringify(data),
+			method: "POST",
+			dataType: "json",
+			contentType: "application/json"
+		});
 	}
 });

@@ -1,0 +1,13 @@
+{
+	"esversion": 6,
+	"curly": true,
+	"freeze": true,
+	"undef": true,
+	"boss": true,
+	"node": true,
+	"unused": true,
+	"globals": {
+		"$": true,
+		"document": true
+	}
+}

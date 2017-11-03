@@ -1,0 +1,55 @@
+html, body{
+	height: 100%;
+}
+body{
+	position: relative;
+}
+
+.flexed{
+	display: flex;
+}
+
+.article-item{
+	margin: 5px 0;
+}
+
+.form-group{
+	margin: 8px 0;
+}
+
+#loader-container{
+	margin: auto;
+	z-index: 10;
+}
+#loader-container > #loader-img{
+	height: 200px;
+	width: 200px;
+	z-index: 1;
+}
+#content{
+	flex-grow: 1;
+}
+
+#content-header{
+	border-bottom: 1px solid #e9ecef;
+	margin-bottom: 5px;
+}
+#content-header > div{
+	flex-direction: row;
+}
+#content-header > div > a,
+#content-header > div > p{
+	margin-bottom: 5px;
+}
+
+#input-image-selector{
+	height: 150px;
+	width: 150px;
+	border: 1px solid #ced4da;
+	cursor: pointer;
+	overflow: hidden;
+}
+#input-image-selector > img{
+	height: inherit;
+	width: inherit;
+}

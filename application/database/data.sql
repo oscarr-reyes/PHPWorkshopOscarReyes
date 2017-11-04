@@ -1,0 +1,10 @@
+insert into articles (title, description) values ('Duobam', 'pede ac diam cras pellentesque volutpat dui maecenas tristique est');
+insert into articles (title, description) values ('Treeflex', 'at nibh in hac habitasse');
+insert into articles (title, description) values ('Y-Solowarm', 'commodo placerat praesent blandit nam nulla integer pede justo');
+insert into articles (title, description) values ('Rank', 'facilisi cras non velit nec nisi');
+insert into articles (title, description) values ('Namfix', 'phasellus in felis donec semper sapien');
+insert into articles (title, description) values ('Lotstring', 'nulla mollis molestie lorem quisque ut erat curabitur gravida');
+insert into articles (title, description) values ('Tres-Zap', 'et ultrices posuere cubilia curae duis');
+insert into articles (title, description) values ('Y-Solowarm', 'magna vestibulum aliquet ultrices erat tortor sollicitudin mi sit');
+insert into articles (title, description) values ('Rank', 'condimentum curabitur in libero ut massa');
+insert into articles (title, description) values ('Stringtough', 'donec quis orci eget orci vehicula condimentum curabitur in libero');

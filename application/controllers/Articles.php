@@ -4,6 +4,7 @@ class Articles extends CI_Controller{
 		parent::__construct();
 
 		$this->load->model("articles_model");
+		$this->load->helper("url");
 	}
 
 	/**
@@ -13,6 +14,12 @@ class Articles extends CI_Controller{
 	 */
 	public function get($id = NULL){
 		$result = $this->articles_model->find($id);
+
+		foreach($result as $record){
+			if($record->image){
+				$record->image = base_url("/uploads/$record->image");
+			}
+		}
 
 		// Turn the result into a single object
 		if(sizeof($result) == 1){
@@ -37,6 +44,12 @@ class Articles extends CI_Controller{
 
 		// Transform JSON data into POST
 		$payload = $this->getPayload();
+
+		$file = $this->getUpload();
+
+		if($file["data"]){
+			$payload["image"] = $file["data"]["file_name"];
+		}
 
 		// Store the data in the database
 		$save = $this->articles_model->create($payload);
@@ -76,6 +89,12 @@ class Articles extends CI_Controller{
 
 		// Transform JSON data into POST
 		$payload = $this->getPayload();
+
+		$file = $this->getUpload();
+
+		if($file["data"]){
+			$payload["image"] = $file["data"]["file_name"];
+		}
 
 		$save = $this->articles_model->update($id, $payload);
 
@@ -174,5 +193,39 @@ class Articles extends CI_Controller{
 		}
 
 		return $data;
+	}
+
+	/**
+	 * Retrieves the uploaded file info
+	 * 
+	 * @return Array The array object with the file data
+	 */
+	private function getUpload(){
+		$config["upload_path"]   = "./uploads/";
+		$config["allowed_types"] = "gif|png|jpg";
+		$config["max_size"]      = 10000;
+		$config["encrypt_name"]  = true;
+		$result                  = [
+			"writable" => false,
+			"found"    => false,
+			"data"   => false
+		];
+
+		$this->load->library("upload");
+
+		$this->upload->initialize($config);
+
+		if(is_dir($config["upload_path"]) && is_writeable($config["upload_path"])){
+			$result["writable"] = true;
+
+			if($this->upload->do_upload("image")){
+				$result["found"] = true;
+				$result["data"]  = $this->upload->data();
+			}
+			
+		}
+
+		return $result;
+		
 	}
 }

@@ -17,7 +17,7 @@ $(document).ready(function(){
 		fetch: true
 	};
 
-	hideLoader(50)
+	hideLoader(5000)
 		.then(function(){
 			mainContent.removeClass("d-none");
 			return fetchData();

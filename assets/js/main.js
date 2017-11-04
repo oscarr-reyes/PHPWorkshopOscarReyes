@@ -50,16 +50,18 @@ $(document).ready(function(){
 			if(currentState.fetch){
 				articleList.empty();
 
-				compile(data);
-
-				currentState.fetch = false;
+				fetchData()
+					.then(function(data){
+						compile(data);
+						currentState.fetch = false;
+					});
 			}
 		}
 
 		if(this.id == "save-button"){
-			var data = getFormData();
+			var data = new FormData(document.forms[0]);	
 
-			sendData(data)
+			sendData(data, currentState.id)
 				.then(function(){
 					currentState.fetch = true;
 				});
@@ -91,9 +93,9 @@ $(document).ready(function(){
 
 		fetchData(id)
 			.then(function(data){
+				currentState.id = id;
 				displayTo("detail");
 				setFormData(data);
-				currentState.id = data.id;
 			});
 	});
 
@@ -145,24 +147,6 @@ $(document).ready(function(){
 		var template = Handlebars.compile(templateArticle.html());
 
 		articleList.html(template(data));
-	}
-
-	/**
-	 * Gets the form data by iterating the inputs in a form
-	 * 
-	 * @return {Oject} The object obtained from the input
-	 */
-	function getFormData(){
-		var inputs   = $("form *[name]");
-		var formData = {};
-		
-		inputs.each(function(i, e){
-			if(e.value){
-				formData[e.name] = e.value;
-			}
-		});
-
-		return formData;
 	}
 
 	/**
@@ -236,12 +220,20 @@ $(document).ready(function(){
 	 * @return {Promise}      The result for uploading the data
 	 */
 	function sendData(data, $id){
+		var url = APIurl;
+
+		if($id){
+			url += "/" + $id;
+		}
+
 		return $.ajax({
-			url: APIurl,
-			data: JSON.stringify(data),
+			url: url,
+			data: data,
 			method: "POST",
 			dataType: "json",
-			contentType: "application/json"
+			cache: false,
+			contentType: false,
+			processData: false,
 		});
 	}
 });

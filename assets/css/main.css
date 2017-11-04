@@ -13,6 +13,10 @@ body{
 	margin: 5px 0;
 	cursor: pointer;
 }
+.article-item img{
+	height: 100px;
+	width: 100px;
+}
 
 .form-group{
 	margin: 8px 0;

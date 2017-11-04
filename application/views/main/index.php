@@ -38,7 +38,7 @@
 	{{#each this}}
 	<div class="article-item border d-flex flex-row" data-id="{{id}}">
 		<div class="article-item-img">
-			<img src="http://via.placeholder.com/100x100" alt="article image">
+			<img src="{{image}}" alt="Article image">
 		</div>
 		<div class="article-item-content container">
 			<h3>{{title}}</h3>

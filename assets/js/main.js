@@ -210,6 +210,21 @@ $(document).ready(function(){
 			url: url,
 			method: "GET",
 			dataType: "json"
+		})
+		.then(function(data){
+			if(data){
+				if($id){
+					data.image = data.image || "http://via.placeholder.com/100x100";
+				}
+
+				else{
+					data.forEach(function(e, i){
+						data[i].image = data[i].image || "http://via.placeholder.com/100x100";
+					});
+				}
+			}
+
+			return data;
 		});
 	}
 

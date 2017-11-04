@@ -9,6 +9,7 @@ $(document).ready(function(){
 	var imageSelector       = $("#input-image-selector");
 	var inputImage          = $("input[type='file'");
 	var templateArticle     = $("#article-item-template");
+	var deleteBtn           = $("#delete-button");
 
 	var APIurl       = "index.php/api/articles";
 	var currentState = {
@@ -47,6 +48,8 @@ $(document).ready(function(){
 		if(this.id == "back-to-list-button"){
 			displayTo("list");
 
+			deleteBtn.addClass("d-none");
+
 			if(currentState.fetch){
 				articleList.empty();
 
@@ -54,6 +57,7 @@ $(document).ready(function(){
 					.then(function(data){
 						compile(data);
 						currentState.fetch = false;
+						currentState.id = null;
 					});
 			}
 		}
@@ -79,6 +83,26 @@ $(document).ready(function(){
 	});
 
 	/*
+	 * Delete the current selected article when delet button is clicked
+	 */
+	deleteBtn.on("click", function(){
+		deleteData(currentState.id)
+			.then(function(){
+				currentState.id = null;
+
+				deleteBtn.addClass("d-none");
+
+				articleList.empty();
+
+				return fetchData();
+			})
+			.then(function(data){
+				displayTo("list");
+				compile(data);
+			});
+	});
+
+	/*
 	 * Display a preview when an image is selected
 	 */
 	inputImage.on("change", function(){
@@ -94,6 +118,7 @@ $(document).ready(function(){
 		fetchData(id)
 			.then(function(data){
 				currentState.id = id;
+				deleteBtn.removeClass("d-none");
 				displayTo("detail");
 				setFormData(data);
 			});
@@ -234,6 +259,19 @@ $(document).ready(function(){
 			cache: false,
 			contentType: false,
 			processData: false,
+		});
+	}
+
+	/**
+	 * Sends a DELETE request to a article resource
+	 * 
+	 * @param  {Number}  $id The id of the article resource
+	 * @return {Promise}     The result of removing the article
+	 */
+	function deleteData($id){
+		return $.ajax({
+			url: APIurl + "/" + $id,
+			method: "DELETE"
 		});
 	}
 });

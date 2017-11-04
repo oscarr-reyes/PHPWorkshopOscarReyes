@@ -30,6 +30,7 @@
 				<label for="article-description-input">Description</label>
 				<textarea class="form-control" id="article-description-input" name="description" rows="3"></textarea>
 			</div>
+			<button type="button" class="btn btn-danger d-none" id="delete-button">Delete</button>
 		</form>
 	</div>
 </div>

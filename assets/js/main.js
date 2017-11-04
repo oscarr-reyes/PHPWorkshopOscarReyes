@@ -68,7 +68,17 @@ $(document).ready(function(){
 			sendData(data, currentState.id)
 				.then(function(){
 					currentState.fetch = true;
-				});
+					currentState.id = null;
+
+					articleList.empty();
+
+					displayTo("list");
+
+					return fetchData();
+				})
+				.then(function(data){
+					compile(data);
+				})
 		}
 	});
 
